@@ -2087,15 +2087,18 @@ body.filtro-vintage img:not(.no-filter) { filter: brightness(1.05) saturate(0.75
   background: var(--terracotta);
 }
 
-/* Griglia asimmetrica per le prime 5 celle */
+/* ─── GALLERIA BASE: layout specifico per ogni N foto (bento-1…9) ─────────
+   Ogni bento-N ha un layout che riempie ESATTAMENTE N celle.
+   Zero buchi possibili per costruzione geometrica.
+   Il motore JS aggiunge .bento-N in base al numero di foto attive. ──────── */
+
+/* Base: griglia neutra (sovrascritta da bento-N) */
 .galleria__grid {
   display: grid;
-  grid-template-columns: 1.08fr 0.92fr 0.78fr;
-  grid-template-rows: auto auto;
-  gap: var(--gallery-gap);
-  align-items: stretch;
+  gap: 0.75rem;
 }
-/* Celle struttura comune (sostituisce gallery-card) */
+
+/* Struttura comune di ogni cella */
 .opera-forno {
   position: relative;
   overflow: hidden;
@@ -2104,14 +2107,204 @@ body.filtro-vintage img:not(.no-filter) { filter: brightness(1.05) saturate(0.75
   cursor: pointer;
   box-shadow: var(--ombra-profonda);
   border: var(--bordo-morbido);
-  min-height: clamp(230px, 48vw, 520px);
 }
-/* Posizionamento griglia custom */
-.galleria__grid .opera-forno:nth-child(1) { grid-column: 1; grid-row: 1 / 3; min-height: 720px; }
-.galleria__grid .opera-forno:nth-child(2) { grid-column: 2; grid-row: 1; height: 380px; }
-.galleria__grid .opera-forno:nth-child(3) { grid-column: 3; grid-row: 1; height: 280px; }
-.galleria__grid .opera-forno:nth-child(4) { grid-column: 2; grid-row: 2; height: 335px; }
-.galleria__grid .opera-forno:nth-child(5) { grid-column: 3; grid-row: 2; height: 335px; background: var(--cacao); }
+
+/* ── bento-1: 1 colonna, 1 riga ── */
+.galleria__grid.bento-1 {
+  grid-template-columns: 1fr;
+  grid-template-rows: clamp(360px, 55vw, 640px);
+}
+.galleria__grid.bento-1 .opera-forno:nth-child(1) { grid-column:1; grid-row:1; }
+
+/* ── bento-2: 2 colonne, 1 riga ── */
+.galleria__grid.bento-2 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: clamp(300px, 44vw, 520px);
+}
+.galleria__grid.bento-2 .opera-forno:nth-child(1) { grid-column:1; grid-row:1; }
+.galleria__grid.bento-2 .opera-forno:nth-child(2) { grid-column:2; grid-row:1; }
+
+/* ── bento-3: foto-1 sinistra alta, foto-2 e 3 destra impilate ── */
+.galleria__grid.bento-3 {
+  grid-template-columns: 1.3fr 1fr;
+  grid-template-rows: clamp(240px, 30vw, 360px) clamp(240px, 30vw, 360px);
+}
+.galleria__grid.bento-3 .opera-forno:nth-child(1) { grid-column:1; grid-row:1/3; }
+.galleria__grid.bento-3 .opera-forno:nth-child(2) { grid-column:2; grid-row:1; }
+.galleria__grid.bento-3 .opera-forno:nth-child(3) { grid-column:2; grid-row:2; }
+
+/* ── bento-4: 2 colonne × 2 righe, griglia regolare ── */
+.galleria__grid.bento-4 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: clamp(240px, 30vw, 380px) clamp(240px, 30vw, 380px);
+}
+.galleria__grid.bento-4 .opera-forno:nth-child(1) { grid-column:1; grid-row:1; }
+.galleria__grid.bento-4 .opera-forno:nth-child(2) { grid-column:2; grid-row:1; }
+.galleria__grid.bento-4 .opera-forno:nth-child(3) { grid-column:1; grid-row:2; }
+.galleria__grid.bento-4 .opera-forno:nth-child(4) { grid-column:2; grid-row:2; }
+
+/* ── bento-5: foto-1 full-width, poi 2×2 sotto ── */
+.galleria__grid.bento-5 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: clamp(300px, 42vw, 500px) clamp(220px, 28vw, 340px) clamp(220px, 28vw, 340px);
+}
+.galleria__grid.bento-5 .opera-forno:nth-child(1) { grid-column:1/3; grid-row:1; }
+.galleria__grid.bento-5 .opera-forno:nth-child(2) { grid-column:1;   grid-row:2; }
+.galleria__grid.bento-5 .opera-forno:nth-child(3) { grid-column:2;   grid-row:2; }
+.galleria__grid.bento-5 .opera-forno:nth-child(4) { grid-column:1;   grid-row:3; }
+.galleria__grid.bento-5 .opera-forno:nth-child(5) { grid-column:2;   grid-row:3; }
+
+/* ── bento-6: 3 colonne × 2 righe ── */
+.galleria__grid.bento-6 {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: clamp(220px, 28vw, 360px) clamp(220px, 28vw, 360px);
+}
+.galleria__grid.bento-6 .opera-forno:nth-child(1) { grid-column:1; grid-row:1; }
+.galleria__grid.bento-6 .opera-forno:nth-child(2) { grid-column:2; grid-row:1; }
+.galleria__grid.bento-6 .opera-forno:nth-child(3) { grid-column:3; grid-row:1; }
+.galleria__grid.bento-6 .opera-forno:nth-child(4) { grid-column:1; grid-row:2; }
+.galleria__grid.bento-6 .opera-forno:nth-child(5) { grid-column:2; grid-row:2; }
+.galleria__grid.bento-6 .opera-forno:nth-child(6) { grid-column:3; grid-row:2; }
+
+/* ── bento-7: foto-1 full-width, poi 3×2 righe ── */
+.galleria__grid.bento-7 {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: clamp(280px, 38vw, 460px) clamp(200px, 25vw, 320px) clamp(200px, 25vw, 320px);
+}
+.galleria__grid.bento-7 .opera-forno:nth-child(1) { grid-column:1/4; grid-row:1; }
+.galleria__grid.bento-7 .opera-forno:nth-child(2) { grid-column:1;   grid-row:2; }
+.galleria__grid.bento-7 .opera-forno:nth-child(3) { grid-column:2;   grid-row:2; }
+.galleria__grid.bento-7 .opera-forno:nth-child(4) { grid-column:3;   grid-row:2; }
+.galleria__grid.bento-7 .opera-forno:nth-child(5) { grid-column:1;   grid-row:3; }
+.galleria__grid.bento-7 .opera-forno:nth-child(6) { grid-column:2;   grid-row:3; }
+.galleria__grid.bento-7 .opera-forno:nth-child(7) { grid-column:3;   grid-row:3; }
+
+/* ── bento-8: 4 colonne × 2 righe ── */
+.galleria__grid.bento-8 {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: clamp(200px, 25vw, 340px) clamp(200px, 25vw, 340px);
+}
+.galleria__grid.bento-8 .opera-forno:nth-child(1) { grid-column:1; grid-row:1; }
+.galleria__grid.bento-8 .opera-forno:nth-child(2) { grid-column:2; grid-row:1; }
+.galleria__grid.bento-8 .opera-forno:nth-child(3) { grid-column:3; grid-row:1; }
+.galleria__grid.bento-8 .opera-forno:nth-child(4) { grid-column:4; grid-row:1; }
+.galleria__grid.bento-8 .opera-forno:nth-child(5) { grid-column:1; grid-row:2; }
+.galleria__grid.bento-8 .opera-forno:nth-child(6) { grid-column:2; grid-row:2; }
+.galleria__grid.bento-8 .opera-forno:nth-child(7) { grid-column:3; grid-row:2; }
+.galleria__grid.bento-8 .opera-forno:nth-child(8) { grid-column:4; grid-row:2; }
+
+/* ── bento-9: 3 colonne × 3 righe ── */
+.galleria__grid.bento-9 {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: clamp(200px, 25vw, 340px) clamp(200px, 25vw, 340px) clamp(200px, 25vw, 340px);
+}
+.galleria__grid.bento-9 .opera-forno:nth-child(1) { grid-column:1; grid-row:1; }
+.galleria__grid.bento-9 .opera-forno:nth-child(2) { grid-column:2; grid-row:1; }
+.galleria__grid.bento-9 .opera-forno:nth-child(3) { grid-column:3; grid-row:1; }
+.galleria__grid.bento-9 .opera-forno:nth-child(4) { grid-column:1; grid-row:2; }
+.galleria__grid.bento-9 .opera-forno:nth-child(5) { grid-column:2; grid-row:2; }
+.galleria__grid.bento-9 .opera-forno:nth-child(6) { grid-column:3; grid-row:2; }
+.galleria__grid.bento-9 .opera-forno:nth-child(7) { grid-column:1; grid-row:3; }
+.galleria__grid.bento-9 .opera-forno:nth-child(8) { grid-column:2; grid-row:3; }
+.galleria__grid.bento-9 .opera-forno:nth-child(9) { grid-column:3; grid-row:3; }
+
+/* ─── GALLERIA ESTESA (overlay): auto-fill fluido, 1 foto visibile ──────────
+   L'img è position:absolute, il parent DEVE avere altezza calcolata.
+   !important batte qualsiasi regola ereditata o in cache. */
+.galleria__grid-estesa {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+  align-items: stretch;
+}
+.galleria__grid-estesa .opera-forno,
+.galleria__grid-estesa .opera-forno:nth-child(1),
+.galleria__grid-estesa .opera-forno:nth-child(n) {
+  min-height: clamp(260px, 38vw, 420px) !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+}
+
+/* Bottone espandi galleria */
+.galleria__espandi { margin-top: 2.5rem; text-align: center; }
+.galleria__btn {
+  display: inline-flex; align-items: center; gap: 0.8rem;
+  padding: 1rem 2rem; font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--cacao); border: 1px solid rgba(8,8,8,0.3);
+  background: transparent; transition: background 0.4s, color 0.4s, transform 0.4s;
+}
+.galleria__btn::after { content: "↓"; font-size: 1.1rem; font-weight: 300; }
+.galleria__btn:hover { background: var(--cacao); color: var(--latte); transform: translateY(-3px); }
+
+/* ── Responsive ────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* bento-3: passa a 1 col + 2 col su tablet */
+  .galleria__grid.bento-3 { grid-template-columns: 1.2fr 1fr; }
+  /* bento-4: 2×2 invariato */
+  /* bento-5: foto-1 full, poi 2×2 invariato */
+  /* bento-6: 3 col → 2 col, 3 righe */
+  .galleria__grid.bento-6 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: clamp(200px,28vw,320px) clamp(200px,28vw,320px) clamp(200px,28vw,320px);
+  }
+  .galleria__grid.bento-6 .opera-forno:nth-child(4) { grid-column:1; grid-row:3; }
+  .galleria__grid.bento-6 .opera-forno:nth-child(5) { grid-column:2; grid-row:3; }
+  .galleria__grid.bento-6 .opera-forno:nth-child(6) { grid-column:1/3; grid-row:4; }
+  /* bento-7,8,9: semplificati a 2 colonne su tablet */
+  .galleria__grid.bento-7,
+  .galleria__grid.bento-8,
+  .galleria__grid.bento-9 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;
+    grid-auto-rows: clamp(200px,28vw,320px);
+  }
+  .galleria__grid.bento-7 .opera-forno,
+  .galleria__grid.bento-8 .opera-forno,
+  .galleria__grid.bento-9 .opera-forno {
+    grid-column: auto; grid-row: auto;
+  }
+  .galleria__grid.bento-7 .opera-forno:nth-child(1),
+  .galleria__grid.bento-8 .opera-forno:nth-child(1),
+  .galleria__grid.bento-9 .opera-forno:nth-child(1) {
+    grid-column: 1/3;
+  }
+  /* Galleria estesa */
+  .galleria__grid-estesa .opera-forno,
+  .galleria__grid-estesa .opera-forno:nth-child(1),
+  .galleria__grid-estesa .opera-forno:nth-child(n) {
+    min-height: clamp(220px, 35vw, 340px) !important;
+  }
+}
+@media (max-width: 600px) {
+  #galleria { padding-inline: 0.85rem; }
+  /* Su mobile: tutte le gallerie a 1 colonna */
+  .galleria__grid.bento-1,
+  .galleria__grid.bento-2,
+  .galleria__grid.bento-3,
+  .galleria__grid.bento-4,
+  .galleria__grid.bento-5,
+  .galleria__grid.bento-6,
+  .galleria__grid.bento-7,
+  .galleria__grid.bento-8,
+  .galleria__grid.bento-9 {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-auto-rows: clamp(220px, 55vw, 340px);
+  }
+  .galleria__grid .opera-forno,
+  .galleria__grid .opera-forno:nth-child(1),
+  .galleria__grid .opera-forno:nth-child(n) {
+    grid-column: 1 !important; grid-row: auto !important;
+  }
+  /* Galleria estesa */
+  .galleria__grid-estesa { grid-template-columns: 1fr; }
+  .galleria__grid-estesa .opera-forno,
+  .galleria__grid-estesa .opera-forno:nth-child(1),
+  .galleria__grid-estesa .opera-forno:nth-child(n) {
+    min-height: 260px !important;
+  }
+}
 
 .opera-forno img:not([hidden]) {
   position: absolute; inset: 0;
@@ -2177,60 +2370,7 @@ body.filtro-vintage img:not(.no-filter) { filter: brightness(1.05) saturate(0.75
   color: rgba(255,255,255,0.7); overflow-wrap: break-word;
 }
 
-/* Riga estesa (foto 6-9 se attive) */
-.galleria__grid-estesa {
-  display: grid;
-  grid-template-columns: 1.08fr 0.92fr 0.78fr;
-  gap: var(--gallery-gap);
-  margin-top: var(--gallery-gap);
-  align-items: stretch;
-}
 
-.galleria__grid-estesa .opera-forno:nth-child(1) { grid-column: 1; min-height: auto; }
-.galleria__grid-estesa .opera-forno:nth-child(2) { grid-column: 2; }
-.galleria__grid-estesa .opera-forno:nth-child(3) { grid-column: 3; }
-
-/* Bottone espandi galleria */
-.galleria__espandi { margin-top: 2.5rem; text-align: center; }
-.galleria__btn {
-  display: inline-flex; align-items: center; gap: 0.8rem;
-  padding: 1rem 2rem; font-size: 0.72rem; font-weight: 600;
-  letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--cacao); border: 1px solid rgba(8,8,8,0.3);
-  background: transparent; transition: background 0.4s, color 0.4s, transform 0.4s;
-}
-.galleria__btn::after { content: "↓"; font-size: 1.1rem; font-weight: 300; }
-.galleria__btn:hover { background: var(--cacao); color: var(--latte); transform: translateY(-3px); }
-
-@media (max-width: 900px) {
-  .galleria__grid, .galleria__grid-estesa { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-  .galleria__grid .opera-forno:nth-child(1) { grid-column: 1/3; grid-row: 1; min-height: 500px; }
-  .galleria__grid .opera-forno:nth-child(2) { grid-column: 1; grid-row: 2; height: 320px; }
-  .galleria__grid .opera-forno:nth-child(3) { grid-column: 2; grid-row: 2; height: 320px; }
-  .galleria__grid .opera-forno:nth-child(4) { grid-column: 1; grid-row: 3; height: 280px; }
-  .galleria__grid .opera-forno:nth-child(5) { grid-column: 2; grid-row: 3; height: 280px; }
-  .galleria__grid-estesa { grid-template-columns: 1fr 1fr; }
-  .galleria__grid-estesa .opera-forno { grid-column: auto; grid-row: auto; height: 260px; }
-  .galleria__grid-estesa .opera-forno:nth-child(1) { grid-column: 1 / -1; height: 340px; }
-}
-@media (max-width: 600px) {
-  #galleria { padding-inline: 0.85rem; }
-  .galleria__grid, .galleria__grid-estesa { grid-template-columns: 1fr; }
-  .galleria__grid .opera-forno:nth-child(1) { grid-column: 1; grid-row: 1; min-height: 400px; }
-  .galleria__grid .opera-forno:nth-child(2) { grid-column: 1; grid-row: 2; height: 280px; }
-  .galleria__grid .opera-forno:nth-child(3) { grid-column: 1; grid-row: 3; height: 260px; }
-  .galleria__grid .opera-forno:nth-child(4) { grid-column: 1; grid-row: 4; height: 280px; }
-  .galleria__grid .opera-forno:nth-child(5) { grid-column: 1; grid-row: 5; height: 280px; }
-  .galleria__grid-estesa { grid-template-columns: 1fr; }
-  .galleria__grid-estesa .opera-forno,
-  .galleria__grid-estesa .opera-forno:nth-child(1),
-  .galleria__grid-estesa .opera-forno:nth-child(2),
-  .galleria__grid-estesa .opera-forno:nth-child(3) {
-    grid-column: 1;
-    grid-row: auto;
-    height: 260px;
-  }
-}
 
 /* 
 ═══════════════════════════════════════════════════════════════ 
