@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lascia la tua recensione</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Jost:wght@300;400;500;600;700&display=swap">
+
+<style>
+/* ═══════════════════════════════════════════════════
+   TOKENS — stessa palette di index.html (NOTTE_PANE)
+═══════════════════════════════════════════════════ */
+:root {
+  --crema:      #fdfbf8;
+  --latte:      #ffffff;
+  --burro:      #efe5d4;
+  --terracotta: #cda461;
+  --crosta:     #1a1a1a;
+  --cacao:      #080808;
+  --oro:        #d4af37;
+
+  --head: "Fraunces", Georgia, serif;
+  --body: "Jost", system-ui, sans-serif;
+  --radius: 0px;
+}
+
+/* ═══════════════════════════════════════════════════
+   RESET BASE
+═══════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+  background: var(--cacao);
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+body {
+  min-height: 100svh;
+  font-family: var(--body);
+  background: var(--cacao);
+  color: var(--crema);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+  position: relative;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+/* Grain texture */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.035;
+  mix-blend-mode: screen;
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(205,164,97,0.9) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 72% 38%, rgba(253,251,248,0.4) 0 0.9px, transparent 1.1px),
+    radial-gradient(circle at 36% 78%, rgba(253,251,248,0.2) 0 0.8px, transparent 1px);
+  background-size: 30px 30px, 40px 40px, 20px 20px;
+}
+
+/* Sottile linea dorata in cima */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--terracotta), var(--oro), var(--terracotta), transparent);
+  z-index: 10;
+}
+
+/* ═══════════════════════════════════════════════════
+   SCHEDA PRINCIPALE
+═══════════════════════════════════════════════════ */
+.card {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 620px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+/* Logo / nome attività */
+.card-brand {
+  font-family: var(--head);
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  opacity: 0;
+  animation: fadeUp 0.7s 0.1s ease forwards;
+}
+
+/* Domanda principale */
+.card-question {
+  font-family: var(--head);
+  font-size: clamp(1.9rem, 6vw, 3.4rem);
+  font-weight: 600;
+  line-height: 1.18;
+  color: var(--crema);
+  letter-spacing: -0.01em;
+  width: 100%;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.25s ease forwards;
+}
+
+/* ═══════════════════════════════════════════════════
+   STELLE
+═══════════════════════════════════════════════════ */
+.stars-wrap {
+  display: flex;
+  gap: clamp(0.5rem, 2.5vw, 1.1rem);
+  opacity: 0;
+  animation: fadeUp 0.7s 0.45s ease forwards;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+.star-btn:focus-visible {
+  outline: 2px solid var(--terracotta);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.star-btn:hover  { transform: scale(1.18) rotate(-5deg); }
+.star-btn:active { transform: scale(0.95); }
+
+.star-icon {
+  display: block;
+  width: clamp(2.8rem, 9vw, 4.5rem);
+  height: clamp(2.8rem, 9vw, 4.5rem);
+  transition: filter 0.3s ease;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+.star-icon path {
+  fill: none;
+  stroke: rgba(253,251,248,0.3);
+  stroke-width: 1.5;
+  transition: fill 0.35s ease, stroke 0.35s ease;
+}
+
+/* Stato: evidenziato (hover o selezionato) */
+.star-btn.is-hovered .star-icon path,
+.star-btn.is-selected .star-icon path {
+  fill: var(--oro);
+  stroke: var(--oro);
+}
+/* Per bassa valutazione (1–3) colore arancio smorzato */
+.stars-wrap.low-rating .star-btn.is-hovered .star-icon path,
+.stars-wrap.low-rating .star-btn.is-selected .star-icon path {
+  fill: #e09d3a;
+  stroke: #e09d3a;
+}
+
+/* ═══════════════════════════════════════════════════
+   PANNELLO RISPOSTA  (hidden per default)
+═══════════════════════════════════════════════════ */
+.response-panel {
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.response-panel.is-visible {
+  display: flex;
+  opacity: 1;
+  transform: none;
+}
+
+.response-icon {
+  font-size: clamp(2.8rem, 8vw, 4rem);
+  line-height: 1;
+  animation: pop 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+.response-text {
+  font-size: clamp(1rem, 2.8vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.65;
+  color: rgba(253,251,248,0.85);
+  max-width: 500px;
+}
+
+/* Pulsante universale */
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: clamp(0.9rem, 3vw, 1.15rem) clamp(1.8rem, 5vw, 3rem);
+  font-family: var(--body);
+  font-size: clamp(0.78rem, 2vw, 0.9rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease, filter 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+.cta-btn:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 4px; }
+.cta-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background 0.25s ease;
+}
+.cta-btn:hover::after { background: rgba(255,255,255,0.08); }
+.cta-btn:hover  { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(0,0,0,0.35); }
+.cta-btn:active { transform: translateY(0); }
+
+/* Variante WhatsApp (insoddisfatto) */
+.cta-btn--whatsapp {
+  background: #1a1a1a;
+  color: var(--crema);
+  border: 1px solid rgba(205,164,97,0.35);
+}
+
+/* Variante Google (soddisfatto) — dorata brillante */
+.cta-btn--google {
+  background: linear-gradient(135deg, var(--terracotta) 0%, var(--oro) 100%);
+  color: var(--cacao);
+  box-shadow: 0 8px 30px rgba(212,175,55,0.4);
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  padding: clamp(1rem, 3vw, 1.3rem) clamp(2rem, 6vw, 3.5rem);
+}
+.cta-btn--google:hover {
+  box-shadow: 0 18px 50px rgba(212,175,55,0.6);
+  filter: brightness(1.08);
+}
+
+/* Nota piccola sotto il bottone Google */
+.note-small {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: rgba(253,251,248,0.35);
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════
+   CORIANDOLI CANVAS
+═══════════════════════════════════════════════════ */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+#confetti-canvas.active { opacity: 1; }
+
+/* ═══════════════════════════════════════════════════
+   ANIMAZIONI
+═══════════════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* Shimmer sul bottone Google */
+.cta-btn--google {
+  background-size: 200% auto;
+  background-image: linear-gradient(135deg, var(--terracotta) 0%, var(--oro) 40%, #f0c96f 55%, var(--oro) 70%, var(--terracotta) 100%);
+  animation: shimmer 3.5s linear infinite;
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .card-brand, .card-question, .stars-wrap { opacity: 1 !important; }
+}
+@media (max-width: 480px) {
+  body { padding: 2rem 1rem; }
+  .card { gap: 2rem; }
+  .card-question {
+    font-size: clamp(1.55rem, 8vw, 2.05rem);
+    line-height: 1.22;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Canvas coriandoli -->
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+<main class="card" role="main">
+
+  <!-- Nome attività (letto dal config) -->
+  <p class="card-brand" id="brand-name" aria-label="Nome attività"></p>
+
+  <!-- Domanda hero -->
+  <h1 class="card-question">
+    Ciao! Come è andata la tua esperienza da noi oggi?
+  </h1>
+
+  <!-- Stelle -->
+  <div class="stars-wrap" id="stars-wrap" role="group" aria-label="Seleziona un punteggio da 1 a 5 stelle">
+    <!-- Stelle generate via JS -->
+  </div>
+
+  <!-- Pannello risposta (hidden di default) -->
+  <div class="response-panel" id="response-panel" aria-live="polite" aria-atomic="true">
+    <div class="response-icon" id="response-icon" aria-hidden="true"></div>
+    <p class="response-text" id="response-text"></p>
+    <a class="cta-btn" id="response-cta" href="#" rel="noopener noreferrer"></a>
+    <p class="note-small" id="response-note"></p>
+  </div>
+
+</main>
+
+<script>
+/* ─────────────────────────────────────────────────────
+   1. CARICAMENTO CONFIG
+───────────────────────────────────────────────────── */
+async function loadConfig() {
+  try {
+    const res = await fetch('config.json?v=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch (e) {
+    // Fallback: legge il config inline da index.html se presente, altrimenti oggetto vuoto
+    console.warn('[valutaci] config.json non raggiungibile. Uso valori di default.', e);
+    return {};
+  }
+}
+
+/* ─────────────────────────────────────────────────────
+   2. BUILD URL
+───────────────────────────────────────────────────── */
+function buildWhatsappUrl(numero, msg) {
+  const n = (numero || '').replace(/\D/g, '');
+  const m = encodeURIComponent(msg || 'Ciao, sono un cliente. Volevo segnalare un problema riguardo alla mia visita di oggi.');
+  return n ? `https://wa.me/${n}?text=${m}` : null;
+}
+function buildEmailUrl(email, cfg) {
+  const subj = encodeURIComponent('Feedback sulla mia visita');
+  const body = encodeURIComponent('Ciao,\n\nvolevo segnalare un problema riguardo alla mia visita di oggi.\n\n');
+  return email ? `mailto:${email}?subject=${subj}&body=${body}` : null;
+}
+function buildGoogleUrl(link) {
+  return (link && link !== 'https://g.page/r/INSERISCI_QUI_IL_TUO_LINK') ? link : null;
+}
+
+/* ─────────────────────────────────────────────────────
+   3. STELLE SVG
+───────────────────────────────────────────────────── */
+function createStarSvg() {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.classList.add('star-icon');
+  const path = document.createElementNS(ns, 'path');
+  path.setAttribute('d', 'M12 2.25l2.93 5.94 6.57.95-4.75 4.63 1.12 6.54L12 17.27l-5.87 3.09 1.12-6.54L2.5 9.14l6.57-.95z');
+  svg.appendChild(path);
+  return svg;
+}
+
+function buildStars(wrap) {
+  for (let i = 1; i <= 5; i++) {
+    const btn = document.createElement('button');
+    btn.classList.add('star-btn');
+    btn.setAttribute('aria-label', `${i} ${i === 1 ? 'stella' : 'stelle'}`);
+    btn.dataset.value = i;
+    btn.appendChild(createStarSvg());
+    wrap.appendChild(btn);
+  }
+}
+
+/* ─────────────────────────────────────────────────────
+   4. INTERAZIONE STELLE
+───────────────────────────────────────────────────── */
+function setupStars(wrap, onSelect) {
+  const stars = [...wrap.querySelectorAll('.star-btn')];
+  let locked = false;
+
+  function highlight(upTo, isLow) {
+    wrap.classList.toggle('low-rating', isLow);
+    stars.forEach((s, idx) => {
+      s.classList.toggle('is-hovered', idx < upTo);
+    });
+  }
+
+  stars.forEach((star, idx) => {
+    star.addEventListener('mouseenter', () => {
+      if (locked) return;
+      highlight(idx + 1, idx + 1 <= 3);
+    });
+    star.addEventListener('mouseleave', () => {
+      if (locked) return;
+      highlight(0, false);
+    });
+    star.addEventListener('click', () => {
+      if (locked) return;
+      locked = true;
+      const rating = idx + 1;
+      wrap.classList.toggle('low-rating', rating <= 3);
+      stars.forEach((s, i) => {
+        s.classList.remove('is-hovered');
+        s.classList.toggle('is-selected', i <= idx);
+        s.setAttribute('aria-pressed', i <= idx ? 'true' : 'false');
+        s.disabled = true;
+      });
+      // Micro-bounce sull'ultima stella selezionata
+      star.style.transform = 'scale(1.35) rotate(-8deg)';
+      setTimeout(() => { star.style.transform = ''; }, 350);
+      onSelect(rating);
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+   5. MOSTRA PANNELLO RISPOSTA
+───────────────────────────────────────────────────── */
+function showResponse({ icon, text, ctaText, ctaHref, ctaClass, note }) {
+  const panel  = document.getElementById('response-panel');
+  const iconEl = document.getElementById('response-icon');
+  const textEl = document.getElementById('response-text');
+  const ctaEl  = document.getElementById('response-cta');
+  const noteEl = document.getElementById('response-note');
+
+  iconEl.textContent = icon;
+  textEl.textContent = text;
+  ctaEl.textContent  = ctaText;
+  ctaEl.href         = ctaHref || '#';
+  ctaEl.className    = 'cta-btn ' + ctaClass;
+  if (ctaHref && ctaHref !== '#') {
+    ctaEl.setAttribute('target', '_blank');
+  }
+  noteEl.textContent = note || '';
+  noteEl.style.display = note ? '' : 'none';
+
+  // Forza display:flex poi triggera la transizione
+  panel.style.display = 'flex';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      panel.classList.add('is-visible');
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────────────
+   6. CORIANDOLI
+───────────────────────────────────────────────────── */
+(function() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let raf = null;
+  const COLORS = ['#d4af37','#cda461','#fdfbf8','#e09d3a','#efe5d4','#fff','#f9e784'];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function Particle() {
+    this.x  = Math.random() * canvas.width;
+    this.y  = -10 - Math.random() * 20;
+    this.w  = 6 + Math.random() * 8;
+    this.h  = 3 + Math.random() * 5;
+    this.vx = (Math.random() - 0.5) * 3;
+    this.vy = 2.5 + Math.random() * 3.5;
+    this.rot   = Math.random() * Math.PI * 2;
+    this.rotV  = (Math.random() - 0.5) * 0.15;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    this.alpha = 1;
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x   += p.vx;
+      p.y   += p.vy;
+      p.rot += p.rotV;
+      p.vy  += 0.05; // gravità
+      // Fade out vicino al fondo
+      if (p.y > canvas.height * 0.75) {
+        p.alpha = Math.max(0, 1 - (p.y - canvas.height * 0.75) / (canvas.height * 0.25));
+      }
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      // Alterna rettangoli e cerchi
+      if (Math.random() > 0.5) {
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      } else {
+        ctx.arc(0, 0, p.w / 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    });
+    particles = particles.filter(p => p.y < canvas.height + 20 && p.alpha > 0);
+    if (particles.length > 0) {
+      raf = requestAnimationFrame(loop);
+    } else {
+      canvas.classList.remove('active');
+    }
+  }
+
+  window.launchConfetti = function() {
+    canvas.classList.add('active');
+    // Generiamo in 3 ondate
+    function burst(n) {
+      for (let i = 0; i < n; i++) particles.push(new Particle());
+    }
+    burst(80);
+    setTimeout(() => burst(60), 350);
+    setTimeout(() => burst(50), 700);
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(loop);
+  };
+})();
+
+/* ─────────────────────────────────────────────────────
+   7. INIT
+───────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', async () => {
+  const cfg = await loadConfig();
+
+  // Brand name
+  const brandEl = document.getElementById('brand-name');
+  brandEl.textContent = cfg.schema_nome || cfg.footer_nome || cfg.navbar_logo_testo || '';
+
+  // Stelle
+  const wrap = document.getElementById('stars-wrap');
+  buildStars(wrap);
+
+  setupStars(wrap, (rating) => {
+
+    if (rating <= 3) {
+      /* ── SCENARIO A: Insoddisfatto ── */
+      const tipo = (cfg.valutaci_cta_insoddisfatto_tipo || cfg.footer_cta_tipo || 'WHATSAPP').toUpperCase();
+      let href = '#';
+
+      if (tipo === 'WHATSAPP') {
+        const msg = `Ciao ${cfg.schema_nome || ''}, sono un cliente. Volevo segnalare un problema riguardo alla mia visita di oggi.`.trim();
+        href = buildWhatsappUrl(cfg.footer_whatsapp || cfg.footer_telefono, msg) || '#';
+      } else if (tipo === 'EMAIL') {
+        href = buildEmailUrl(cfg.footer_email, cfg) || '#';
+      }
+
+      showResponse({
+        icon:     '😔',
+        text:     cfg.valutaci_testo_insoddisfatto || 'Ci dispiace! Ti andrebbe di dirci in privato cosa è andato storto?',
+        ctaText:  cfg.valutaci_cta_insoddisfatto_testo || 'Scrivi al Titolare',
+        ctaHref:  href,
+        ctaClass: 'cta-btn--whatsapp',
+        note:     ''
+      });
+
+    } else {
+      /* ── SCENARIO B: Soddisfatto ── */
+      const googleUrl = buildGoogleUrl(cfg.link_recensioni_google) || '#';
+
+      showResponse({
+        icon:     '🌟',
+        text:     cfg.valutaci_testo_soddisfatto || 'Fantastico! Lasciaci una recensione su Google, ci vuole solo un momento.',
+        ctaText:  cfg.valutaci_cta_soddisfatto_testo || 'Votaci su Google ⭐',
+        ctaHref:  googleUrl,
+        ctaClass: 'cta-btn--google',
+        note:     'Ci vogliono letteralmente 10 secondi'
+      });
+
+      // Lancia i coriandoli dopo un breve ritardo (dà tempo al pannello di apparire)
+      setTimeout(() => { window.launchConfetti(); }, 400);
+    }
+  });
+});
+</script>
+</body>
+</html>
