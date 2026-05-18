@@ -33,7 +33,7 @@
   "popup_scadenza": "",
   "popup_cta_testo": "Scopri di più",
   "popup_cta_tipo": "WHATSAPP",
-  "hero_layout": "SENZA_FOTO",
+  "hero_layout": "VARIANTE_1",
   "hero_foto": "",
   "hero_placeholder": "",
   "hero_titolo": "Maison Aurora",
@@ -394,5 +394,11 @@
   "badge_attivo": "SI",
   "badge_tipo": "WHATSAPP",
   "cookie_policy_testo": "Questo sito utilizza esclusivamente cookie tecnici necessari al funzionamento. I cookie tecnici sono necessari per la navigazione e per usufruire delle funzioni del sito. Non richiedono consenso ai sensi del GDPR. Puoi disabilitare i cookie dal tuo browser. Tieni presente che alcune funzionalità del sito potrebbero non essere disponibili.",
-  "privacy_policy_testo": "Ai sensi dell'art. 13 del Regolamento UE 2016/679 (GDPR), il titolare del trattamento informa che i dati personali eventualmente forniti dagli utenti saranno trattati nel rispetto della normativa vigente. I dati forniti volontariamente sono trattati esclusivamente per rispondere alle richieste degli utenti. L'utente ha diritto di accesso, rettifica, cancellazione e portabilità dei propri dati. Per esercitare tali diritti contattare il titolare agli indirizzi indicati."
+  "privacy_policy_testo": "Ai sensi dell'art. 13 del Regolamento UE 2016/679 (GDPR), il titolare del trattamento informa che i dati personali eventualmente forniti dagli utenti saranno trattati nel rispetto della normativa vigente. I dati forniti volontariamente sono trattati esclusivamente per rispondere alle richieste degli utenti. L'utente ha diritto di accesso, rettifica, cancellazione e portabilità dei propri dati. Per esercitare tali diritti contattare il titolare agli indirizzi indicati.",
+  "link_recensioni_google": "https://app.reviewflowz.com/l/15Qb353OPMho5dFh3D5dvs",
+  "valutaci_testo_insoddisfatto": "Oh no! Ci dispiace tantissimo che non sia stato tutto perfetto. Per noi la tua opinione è vitale. Ti andrebbe di dirci in privato cosa è andato storto così possiamo rimediare subito?",
+  "valutaci_cta_insoddisfatto_testo": "Scrivi al Titolare",
+  "valutaci_cta_insoddisfatto_tipo": "WHATSAPP",
+  "valutaci_testo_soddisfatto": "Fantastico! Siamo felicissimi. Le piccole attività come la nostra vivono grazie al passaparola. Ci faresti un regalo enorme lasciandoci questo voto su Google?",
+  "valutaci_cta_soddisfatto_testo": "Votaci su Google ⭐"
 }
