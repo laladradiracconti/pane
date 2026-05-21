@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link id="favicon-link" rel="icon" href="data:,">
-<title>Maison Aurora | L&#39;Atelier del Gusto · Roma</title>
+<title>Maison Aurora | L'Atelier del Gusto · Roma</title>
 <meta name="description" content="L'esclusiva boutique della panificazione a Roma. Lievitati d'autore e creazioni sartoriali a tiratura limitata firmate Maison Aurora.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Maison Aurora | L'Atelier del Gusto · Roma">
 <meta property="og:description" content="L'esclusiva boutique della panificazione a Roma. Lievitati d'autore e creazioni sartoriali a tiratura limitata firmate Maison Aurora.">
 <meta property="og:image" content="">
 <meta name="theme-color" content="#080808">
-<script type="application/ld+json" id="schema-json"></script>
+<script type="application/ld+json" id="schema-json"></script>
+<link id="hero-preload" rel="preload" as="image" href="assets/static-hero-foto-maniinpasta-w1100.webp" fetchpriority="high" imagesrcset="assets/static-hero-foto-maniinpasta-w640.webp 640w, assets/static-hero-foto-maniinpasta-w1100.webp 1100w" imagesizes="100vw">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link id="font-link" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Jost:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'">
@@ -41,23 +42,23 @@
   "navbar_voce_recensioni": "Voci",
   "navbar_voce_faq": "Domande",
   "navbar_voce_contatti": "Contatti",
-  "barra_attiva": "SI",
+  "barra_attiva": "NO",
   "barra_testo": "Nuova collezione autunnale — panettoni artigianali disponibili su prenotazione",
   "barra_scadenza": "",
   "barra_cta_testo": "Prenota",
-  "barra_cta_tipo": "PRENOTAZIONI",
+  "barra_cta_tipo": "WHATSAPP",
   "popup_attivo": "NO",
-  "popup_testo": "gjdjdj",
+  "popup_testo": "",
   "popup_scadenza": "",
   "popup_cta_testo": "Scopri di più",
-  "popup_cta_tipo": "PRENOTAZIONI",
+  "popup_cta_tipo": "WHATSAPP",
   "hero_layout": "VARIANTE_1",
   "hero_foto": "",
   "hero_placeholder": "",
   "hero_titolo": "Maison Aurora",
   "hero_sottotitolo": "L'atelier del gusto. Lievitati d'autore, a tiratura limitata.",
   "hero_cta_testo": "Scrivici",
-  "hero_cta_tipo": "PRENOTAZIONI",
+  "hero_cta_tipo": "WHATSAPP",
   "hero_orari_attivi": "SI",
   "chi_siamo_attivo": "SI",
   "chi_siamo_layout": "FOTO_E_TESTO",
@@ -290,14 +291,14 @@
   "foto_estesa_20_url": "",
   "foto_estesa_20_didascalia": "",
   "foto_estesa_20_placeholder": "",
-  "prima_dopo_attiva": "SI",
+  "prima_dopo_attiva": "NO",
   "prima_dopo_titolo": "Prima e Dopo",
-  "prima_dopo_1_attiva": "SI",
-  "prima_dopo_1_prima": "assets/2026-05-21T13-06-45-731Z-prima-dopo-1-prima-osamu-dazai-w815.webp",
+  "prima_dopo_1_attiva": "NO",
+  "prima_dopo_1_prima": "",
   "prima_dopo_1_prima_placeholder": "",
-  "prima_dopo_1_dopo": "assets/2026-05-21T13-06-50-996Z-prima-dopo-1-dopo-gemini-generated-image-qn7gsbqn7gsbqn7g-w1000.webp",
+  "prima_dopo_1_dopo": "",
   "prima_dopo_1_dopo_placeholder": "",
-  "prima_dopo_1_didascalia": "fkfk",
+  "prima_dopo_1_didascalia": "",
   "prima_dopo_2_attiva": "NO",
   "prima_dopo_2_prima": "",
   "prima_dopo_2_prima_placeholder": "",
@@ -4369,7 +4370,7 @@ section,
           function update(v) {
             const pct = Math.max(0, Math.min(100, v));
             stage.style.setProperty('--reveal-pct', pct + '%');
-            dopo.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+            dopo.style.clipPath = 'inset(0 0 0 ' + pct + '%)';
             if (handle) handle.style.left = pct + '%';
             range.value = String(Math.round(pct));
           }
